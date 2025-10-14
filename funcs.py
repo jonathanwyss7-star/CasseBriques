@@ -112,12 +112,17 @@ class Ball:
 
         if self.posy == 600:
             game.removeLife()
-
+"""
         ball_edge_x = self.posx + self.radius
         if 565 < self.posy < 590:
             if racket.posx <= ball_edge_x <= racket.posx + racket.width:
                 self.speed_y *= -1
             elif (racket.posx - 5) <= ball_edge_x <= (racket.posx + 5) or (racket.posx + racket.width - 5) <= ball_edge_x <= (racket.posx + racket.width + 5):
+                self.speed_x *= -1
+"""
+
+        if 565 < self.posy < 590 and self.speed_y >0:
+            if (racket.posx - 5) <= ball_edge_x <= (racket.posx + 5) or (racket.posx + racket.width - 5) <= ball_edge_x <= (racket.posx + racket.width + 5):
                 self.speed_x *= -1
 
         #racket_left=racket.posx - 
