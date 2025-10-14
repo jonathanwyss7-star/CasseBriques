@@ -123,7 +123,7 @@ class Ball:
         """
         ball_edge_x = self.posx + self.radius
         if (565 < self.posy < 590) and self.speed_y >0:
-            if (racket.posx -5) <= ball_edge_x <= (racket.posx + 75):
+            if (racket.posx) <= ball_edge_x <= (racket.posx + racket.width):
 
                 self.speed_y *= -1
 
