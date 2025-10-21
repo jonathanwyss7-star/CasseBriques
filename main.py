@@ -19,9 +19,12 @@ gameCanvas = f.tkPlaceGameCanvas(root, WINDOW_SIZE)
 
 racket = f.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
 
+brique = f.tkPlaceBrique(gameCanvas, WINDOW_SIZE)
+briques = [brique]
+
 root.bind("<Left>", lambda event: f.tkMoveRacket(racket, 0))
 root.bind("<Right>", lambda event: f.tkMoveRacket(racket, 1))
 
-ball = f.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, racket, fps=100)
+ball = f.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, racket, briques, fps=100)
 
 root.mainloop()

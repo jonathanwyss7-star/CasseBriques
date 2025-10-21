@@ -93,6 +93,24 @@ def tkMoveRacket(racket, direction):
     
     racket.widget.place(x=racket.posx, y=580)
 
+class Brique:
+    def __init__(self, window_size):
+        self.offset = 0
+        self.color = 'red'
+        self.width = int(window_size[0])/8
+        self.posx = int(window_size[0]) // 2 - 50
+        self.widget = None
+
+    def destroy(self):
+        self.widget.destroy()
+
+
+def tkPlaceBrique(root, window_size):
+    brique = Brique(window_size)
+    brique_widget = tk.Canvas(root, width=brique.width, height=20, bg=brique.color)
+    brique_widget.place(x=10, y=10)
+    brique.widget = brique_widget 
+    return brique
 
 class Ball:
     def __init__(self, window_size, speed, game):
@@ -134,8 +152,13 @@ class Ball:
         if self.posy <= 0 or self.posy >= 620 - self.radius * 2:
             self.speed_y *= -1
 
-def tkPlaceBall(game, root, window_size, racket, fps=200):
+def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
     ball = Ball(window_size, speed = 2, game = game)
+    
+    for brique in briques:
+        if brique.x > ... and brique.y < :
+            brique.destroy()
+
     ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
     ball_widget.place(x=ball.posx, y=ball.posy)
     ball_widget.create_oval(0, 0, ball.radius * 2, ball.radius * 2, fill='red', outline='black')
