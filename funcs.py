@@ -113,7 +113,7 @@ class Ball:
         if self.posy == 600:
             game.removeLife()
 
-        """
+        """ 
                 ball_edge_x = self.posx + self.radius
                 if 565 < self.posy < 590:
                     if racket.posx <= ball_edge_x <= racket.posx + racket.width:
