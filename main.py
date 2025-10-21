@@ -2,15 +2,16 @@ import tkinter as tk
 import funcs as f
 
 root = tk.Tk()
-lives = 100
+lives = 3
 livesText = tk.StringVar(root, value=str(lives))
+scoreText = tk.StringVar(root, value=str(0))
 
 WINDOW_SIZE = ['1000', '700']
 
 root, game = f.tkInitTkinter(root, WINDOW_SIZE, 'Casse brique', 'black', lives, livesText)
 
 
-f.tkPlaceScore(root)
+f.tkPlaceScore(root, scoreText)
 f.tkPlaceLives(root, livesText)
 
 f.tkPlaceStartMenu(root, WINDOW_SIZE)
@@ -27,6 +28,5 @@ root.bind("<Left>", lambda event: f.tkMoveRacket(racket, 0))
 root.bind("<Right>", lambda event: f.tkMoveRacket(racket, 1))
 
 ball = f.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=100)
-game.ball = ball
 
 root.mainloop()

@@ -10,13 +10,17 @@ def tkCreateAndPlaceButton(root, text, width, font_size, pos=[0, 0], tkDestroyWi
     button.place(x=pos[0], y=pos[1])
     return button
 
-def tkPlaceScore(root):
-    scoreLabel = tk.Label(root, text='Score: x', width=16, font=('Arial', 14), fg='yellow', bg='black')
+def tkPlaceScore(root, scoreText):
+    scoreLabel = tk.Label(root, textvariable=scoreText, width=5, font=('Arial', 14), fg='yellow', bg='black')
     scoreLabel.place(x=700, y=12)
+    scoreLabelPrefix = tk.Label(root, text="Score: ", width=5, font=('Arial', 14), fg='yellow', bg='black')
+    scoreLabelPrefix.place(x=660, y=12)
 
 def tkPlaceLives(root, livesText):
-    scoreLabel = tk.Label(root, textvariable=livesText, width=16, font=('Arial', 14), fg='yellow', bg='black')
-    scoreLabel.place(x=550, y=12)
+    livesLabelNum = tk.Label(root, textvariable=livesText, width=5, font=('Arial', 14), fg='yellow', bg='black')
+    livesLabelNum.place(x=583, y=12)
+    livesLabelPrefix = tk.Label(root, text="Lives: ", width=5, font=('Arial', 14), fg='yellow', bg='black')
+    livesLabelPrefix.place(x=546, y=12)
 
 def tkPlaceStartMenu(root, window_size):
     startButton = tkCreateAndPlaceButton(root, 'Start', 16, 14, [(int(window_size[0]) // 2) - 90, 150])
@@ -30,7 +34,6 @@ class Game:
         self.lives = lives
         self.livesText = livesText
         self.racket = None
-        self.ball = None
         self.briques = None
 
     def removeLife(self):
@@ -148,12 +151,13 @@ class Ball:
         self.speed_x = self.speed * random.choice([-1, 1])
         self.speed_y = self.speed * random.choice([-1, 1])
         
-    def move(self, game, racket):
+    def move(self, game, racket, briques, ball):
         self.posx += self.speed_x
         self.posy += self.speed_y
 
         if self.posy == 600:
             game.removeLife()
+            self.speed_y *= -1
 
         """ Decartes
                 ball_edge_x = self.posx + self.radius
@@ -173,21 +177,6 @@ class Ball:
             self.speed_x *= -1
         if self.posy <= 0 or self.posy >= 620 - self.radius * 2:
             self.speed_y *= -1
-
-def tkPlaceBall(game, root, window_size, fps=200):
-    briques = game.briques
-    racket = game.racket
-
-    ball = Ball(window_size, speed = 2, game = game)
-    
-    ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
-    ball_widget.place(x=ball.posx, y=ball.posy)
-    ball_widget.create_oval(0, 0, ball.radius * 2, ball.radius * 2, fill='red', outline='black')
-    ball.widget = ball_widget
-
-    def tkUpdateBall():
-        ball.move(game, racket)
-        ball.widget.place(x=ball.posx, y=ball.posy)
 
         for brique in briques:
 
@@ -210,7 +199,6 @@ def tkPlaceBall(game, root, window_size, fps=200):
                 ball_bottom > brick_top and
                 ball_top < brick_bottom):
 
-                # Determine collision side
                 overlap_left = ball_right - brick_left
                 overlap_right = brick_right - ball_left
                 overlap_top = ball_bottom - brick_top
@@ -219,10 +207,10 @@ def tkPlaceBall(game, root, window_size, fps=200):
                 min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
 
                 if min_overlap == overlap_top or min_overlap == overlap_bottom:
-                    # Vertical collision
+                    # ...
                     ball.speed_y *= -1
                 else:
-                    # Horizontal collision
+                    # ...
                     ball.speed_x *= -1
 
                 brique.destroy()
@@ -230,6 +218,21 @@ def tkPlaceBall(game, root, window_size, fps=200):
                 break
 
             #cas horizontal
+
+def tkPlaceBall(game, root, window_size, fps=200):
+    briques = game.briques
+    racket = game.racket
+
+    ball = Ball(window_size, speed = 2, game = game)
+    
+    ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
+    ball_widget.place(x=ball.posx, y=ball.posy)
+    ball_widget.create_oval(0, 0, ball.radius * 2, ball.radius * 2, fill='red', outline='black')
+    ball.widget = ball_widget
+
+    def tkUpdateBall():
+        ball.move(game, racket, briques, ball)
+        ball.widget.place(x=ball.posx, y=ball.posy)
 
         root.after(1000 // fps, tkUpdateBall)
 
