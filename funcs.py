@@ -190,24 +190,43 @@ def tkPlaceBall(game, root, window_size, fps=200):
         ball.widget.place(x=ball.posx, y=ball.posy)
 
         for brique in briques:
+
+            #...
             ball_left = ball.posx
             ball_right = ball.posx + 2 * ball.radius
             ball_top = ball.posy
             ball_bottom = ball.posy + 2 * ball.radius
 
+            #...
             brick_left = brique.posx
             brick_right = brique.posx + brique.width
             brick_top = brique.posy
             brick_bottom = brique.posy + 20
 
+            #...
+
             if (ball_right > brick_left and
                 ball_left < brick_right and
                 ball_bottom > brick_top and
                 ball_top < brick_bottom):
-                
+
+                # Determine collision side
+                overlap_left = ball_right - brick_left
+                overlap_right = brick_right - ball_left
+                overlap_top = ball_bottom - brick_top
+                overlap_bottom = brick_bottom - ball_top
+
+                min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+
+                if min_overlap == overlap_top or min_overlap == overlap_bottom:
+                    # Vertical collision
+                    ball.speed_y *= -1
+                else:
+                    # Horizontal collision
+                    ball.speed_x *= -1
+
                 brique.destroy()
                 briques.remove(brique)
-                ball.speed_y *= -1
                 break
 
             #cas horizontal
