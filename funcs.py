@@ -109,7 +109,7 @@ def tkPlaceBrique(root, window_size):
     brique = Brique(window_size, posx=10, posy=10)
     brique_widget = tk.Canvas(root, width=brique.width, height=20, bg=brique.color)
     brique_widget.place(x=brique.posx, y=brique.posy)
-    brique.widget = brique_widget 
+    brique.widget = brique_widget
     return brique
 
 class Ball:
@@ -155,13 +155,6 @@ class Ball:
 def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
     ball = Ball(window_size, speed = 2, game = game)
     
-    for brique in briques:
-        if (brique.posx < ball.posx < brique.posx + brique.width) and (brique.posy < ball.posy < brique.posy + 20):
-            brique.destroy()
-            briques.remove(brique)
-            ball.speed_y *= -1
-            break
-
     ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
     ball_widget.place(x=ball.posx, y=ball.posy)
     ball_widget.create_oval(0, 0, ball.radius * 2, ball.radius * 2, fill='red', outline='black')
@@ -170,6 +163,14 @@ def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
     def tkUpdateBall():
         ball.move(game, racket)
         ball.widget.place(x=ball.posx, y=ball.posy)
+
+        for brique in briques:
+            if (brique.posx < ball.posx < brique.posx + brique.width) and (brique.posy < ball.posy < brique.posy + 20):
+                brique.destroy()
+                briques.remove(brique)
+                ball.speed_y *= -1
+                break
+
         root.after(1000 // fps, tkUpdateBall)
 
     tkUpdateBall() 
