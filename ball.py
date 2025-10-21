@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from timeit import default_timer as timer
 
 class Ball:
     def __init__(self, window_size, speed, game):
@@ -14,6 +15,7 @@ class Ball:
         self.speed_y = self.speed * np.sin(self.angle)
         
     def move(self, game, racket, briques, ball):
+
         self.posx += self.speed_x
         self.posy += self.speed_y
 
@@ -21,7 +23,7 @@ class Ball:
             game.removeLife()
             self.speed_y *= -1
 
-
+        """
         ball_edge_x = self.posx + self.radius
         if 565 < self.posy < 590:
             if racket.posx <= ball_edge_x <= racket.posx + racket.width:
@@ -29,11 +31,11 @@ class Ball:
             elif (racket.posx - 5) <= ball_edge_x <= (racket.posx + 5) or (racket.posx + racket.width - 5) <= ball_edge_x <= (racket.posx + racket.width + 5):
                 self.speed_x *= -1
         """
+
         ball_edge_x = self.posx + self.radius
         if (565 < self.posy < 590) and self.speed_y >0:
             if (racket.posx) <= ball_edge_x <= (racket.posx + racket.width):
                 self.speed_y *= -1
-        """
 
         if self.posx <= 0 or self.posx >= 980 - self.radius * 2:
             self.speed_x *= -1

@@ -5,6 +5,7 @@ todo: simplification et factorisation du code, entetes fichiers, commentaires, f
 import tkinter as tk
 import racket
 import window as windowClass
+from timeit import default_timer as timer
 
 root = tk.Tk()
 lives = 3

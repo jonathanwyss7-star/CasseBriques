@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+
 class Game:
     def __init__(self, window_size, tkWindow, title, lives, livesText, score, scoreText):
         self.window_size = window_size
