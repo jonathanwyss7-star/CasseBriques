@@ -1,3 +1,7 @@
+"""
+todo: simplification et factorisation du code, entetes fichiers, commentaires, file couleurs balles, play again, modes de jeu etc...
+"""
+
 import tkinter as tk
 import racket
 import window as windowClass
