@@ -97,7 +97,7 @@ class Brique:
     def __init__(self, window_size, posx=10, posy=10):
         self.offset = 0
         self.color = 'red'
-        self.width = int(window_size[0]) / 8
+        self.width = int(window_size[0]) / 10
         self.posx = posx
         self.posy = posy
         self.widget = None
@@ -111,6 +111,31 @@ def tkPlaceBrique(root, window_size):
     brique_widget.place(x=brique.posx, y=brique.posy)
     brique.widget = brique_widget
     return brique
+
+def tkPlaceAllBriques(root, gapx, gapy, padding, window_size):
+    briques = []
+    cols = 8
+    brick_width = int(window_size[0]) / (cols + 1)  # make bricks smaller to fit padding both sides
+    brick_height = 20
+
+    total_grid_width = cols * brick_width + (cols - 1) * gapx + cols*2
+    start_x = (int(window_size[0]) - total_grid_width) / 2  # centers bricks horizontally with padding on both sides
+
+    for y in range(3):
+        for x in range(cols):
+            posx = start_x + x * (brick_width + gapx)
+            posy = padding + y * (brick_height + gapy)
+            brique = Brique(window_size, posx=posx, posy=posy)
+
+            widget = tk.Canvas(root, width=brick_width, height=brick_height, bg=brique.color)
+            widget.place(x=posx, y=posy)
+            brique.widget = widget
+
+            briques.append(brique)
+
+    return briques
+
+
 
 class Ball:
     def __init__(self, window_size, speed, game):
