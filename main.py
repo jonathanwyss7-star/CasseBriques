@@ -1,5 +1,6 @@
 import tkinter as tk
-import funcs as f
+import racket
+import window as windowClass
 
 root = tk.Tk()
 lives = 3
@@ -8,25 +9,30 @@ scoreText = tk.StringVar(root, value=str(0))
 
 WINDOW_SIZE = ['1000', '700']
 
-root, game = f.tkInitTkinter(root, WINDOW_SIZE, 'Casse brique', 'black', lives, livesText)
+#...
+window = windowClass.Window()
+window.tkWindow = root
 
+#...
+root, game = window.tkInitTkinter(root, WINDOW_SIZE, 'Casse brique', 'black', lives, livesText, 0, scoreText)
 
-f.tkPlaceScore(root, scoreText)
-f.tkPlaceLives(root, livesText)
+#...
+window.tkPlaceScore(root, scoreText)
+window.tkPlaceLives(root, livesText)
 
-f.tkPlaceStartMenu(root, WINDOW_SIZE)
+window.tkPlaceStartMenu(root, WINDOW_SIZE)
 
-gameCanvas = f.tkPlaceGameCanvas(root, WINDOW_SIZE)
+gameCanvas = window.tkPlaceGameCanvas(root, WINDOW_SIZE)
 
-racket = f.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
+racket = window.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
 game.racket = racket
 
-briques = f.tkPlaceAllBriques(gameCanvas, 7, 7, 20, WINDOW_SIZE)
+briques = window.tkPlaceAllBriques(gameCanvas, 7, 7, 20, WINDOW_SIZE)
 game.briques = briques
 
-root.bind("<Left>", lambda event: f.tkMoveRacket(racket, 0))
-root.bind("<Right>", lambda event: f.tkMoveRacket(racket, 1))
+root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
+root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
 
-ball = f.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=100)
+ball = window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=150)
 
 root.mainloop()
