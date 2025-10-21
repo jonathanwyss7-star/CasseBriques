@@ -3,6 +3,17 @@ from brique import Brique
 from racket import Racket
 from game import Game
 from ball import Ball
+from tkinter import messagebox
+
+def show_rules():
+    try:
+        with open("readme", "r") as file:
+            content = file.read()
+        # Show content in a popup window
+        messagebox.showinfo("Rules", content)
+    except FileNotFoundError:
+        messagebox.showerror("Error", "File 'readme' not found!")
+
 
 class Window:
     def __init__(self):
@@ -20,6 +31,8 @@ class Window:
         menu_file.add_command(label="Option 2")
 
         menubar.add_cascade(label="Settings", menu=menu_file)
+        #make open file "readme" and display content
+        menubar.add_command(label="Rules", command=show_rules)
         root.config(menu=menubar)
 
         game = Game(window_size, root, window_name, lives, livesText, score, scoreText)

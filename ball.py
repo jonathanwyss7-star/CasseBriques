@@ -30,6 +30,7 @@ class Ball:
                 self.speed_y *= -1
             elif (racket.posx - 5) <= ball_edge_x <= (racket.posx + 5) or (racket.posx + racket.width - 5) <= ball_edge_x <= (racket.posx + racket.width + 5):
                 self.speed_x *= -1
+                
         """
 
         ball_edge_x = self.posx + self.radius

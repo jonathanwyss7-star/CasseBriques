@@ -1,5 +1,5 @@
 """
-todo: simplification et factorisation du code, entetes fichiers, commentaires, file couleurs balles, play again, modes de jeu etc...
+todo: simplification et factorisation du code, entetes fichiers, commentaires, file couleurs balles, play again, modes de jeu, regles etc...
 """
 
 import tkinter as tk
@@ -38,6 +38,6 @@ game.briques = briques
 root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
 root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
 
-ball = window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=150)
+ball = window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=200)
 
 root.mainloop()
