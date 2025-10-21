@@ -31,6 +31,7 @@ class Game:
         self.livesText = livesText
         self.racket = None
         self.ball = None
+        self.briques = None
 
     def removeLife(self):
         self.lives -= 1
@@ -135,8 +136,6 @@ def tkPlaceAllBriques(root, gapx, gapy, padding, window_size):
 
     return briques
 
-
-
 class Ball:
     def __init__(self, window_size, speed, game):
         self.posx = int(window_size[0]) // 2 - 10
@@ -175,7 +174,10 @@ class Ball:
         if self.posy <= 0 or self.posy >= 620 - self.radius * 2:
             self.speed_y *= -1
 
-def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
+def tkPlaceBall(game, root, window_size, fps=200):
+    briques = game.briques
+    racket = game.racket
+
     ball = Ball(window_size, speed = 2, game = game)
     
     ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
