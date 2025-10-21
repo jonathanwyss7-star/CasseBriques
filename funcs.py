@@ -156,7 +156,7 @@ class Ball:
         if self.posy == 600:
             game.removeLife()
 
-        """ 
+        """ Decartes
                 ball_edge_x = self.posx + self.radius
                 if 565 < self.posy < 590:
                     if racket.posx <= ball_edge_x <= racket.posx + racket.width:
@@ -169,8 +169,6 @@ class Ball:
             if (racket.posx) <= ball_edge_x <= (racket.posx + racket.width):
 
                 self.speed_y *= -1
-
-        #racket_left=racket.posx - 
 
         if self.posx <= 0 or self.posx >= 980 - self.radius * 2:
             self.speed_x *= -1
@@ -198,9 +196,8 @@ def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
             brick_left = brique.posx
             brick_right = brique.posx + brique.width
             brick_top = brique.posy
-            brick_bottom = brique.posy + 20  # brick height is 20
+            brick_bottom = brique.posy + 20
 
-            # Check if bounding boxes overlap
             if (ball_right > brick_left and
                 ball_left < brick_right and
                 ball_bottom > brick_top and
@@ -210,6 +207,8 @@ def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
                 briques.remove(brique)
                 ball.speed_y *= -1
                 break
+
+            #cas horizontal
 
         root.after(1000 // fps, tkUpdateBall)
 
