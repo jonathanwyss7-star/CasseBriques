@@ -115,11 +115,11 @@ def tkPlaceBrique(root, window_size):
 def tkPlaceAllBriques(root, gapx, gapy, padding, window_size):
     briques = []
     cols = 8
-    brick_width = int(window_size[0]) / (cols + 1)  # make bricks smaller to fit padding both sides
+    brick_width = int(window_size[0]) / (cols + 1)
     brick_height = 20
 
     total_grid_width = cols * brick_width + (cols - 1) * gapx + cols*2
-    start_x = (int(window_size[0]) - total_grid_width) / 2  # centers bricks horizontally with padding on both sides
+    start_x = (int(window_size[0]) - total_grid_width) / 2
 
     for y in range(3):
         for x in range(cols):
@@ -190,7 +190,22 @@ def tkPlaceBall(game, root, window_size, racket, briques, fps=200):
         ball.widget.place(x=ball.posx, y=ball.posy)
 
         for brique in briques:
-            if (brique.posx < ball.posx < brique.posx + brique.width) and (brique.posy < ball.posy < brique.posy + 20):
+            ball_left = ball.posx
+            ball_right = ball.posx + 2 * ball.radius
+            ball_top = ball.posy
+            ball_bottom = ball.posy + 2 * ball.radius
+
+            brick_left = brique.posx
+            brick_right = brique.posx + brique.width
+            brick_top = brique.posy
+            brick_bottom = brique.posy + 20  # brick height is 20
+
+            # Check if bounding boxes overlap
+            if (ball_right > brick_left and
+                ball_left < brick_right and
+                ball_bottom > brick_top and
+                ball_top < brick_bottom):
+                
                 brique.destroy()
                 briques.remove(brique)
                 ball.speed_y *= -1

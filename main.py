@@ -19,7 +19,7 @@ gameCanvas = f.tkPlaceGameCanvas(root, WINDOW_SIZE)
 
 racket = f.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
 
-briques = f.tkPlaceAllBriques(gameCanvas, 5, 5, 15, WINDOW_SIZE)
+briques = f.tkPlaceAllBriques(gameCanvas, 7, 7, 20, WINDOW_SIZE)
 
 root.bind("<Left>", lambda event: f.tkMoveRacket(racket, 0))
 root.bind("<Right>", lambda event: f.tkMoveRacket(racket, 1))
