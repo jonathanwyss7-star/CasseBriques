@@ -12,6 +12,3 @@ class Brique:
         self.posx = posx
         self.posy = posy
         self.widget = None
-
-    def destroy(self):
-        self.widget.destroy()

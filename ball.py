@@ -15,15 +15,15 @@ class Ball:
         self.speed_x = self.speed * np.cos(self.angle)
         self.speed_y = self.speed * np.sin(self.angle)
         
-    def move(self, game, window, gameCanvas, racket, briques, ball, window_size):
+    def move(self, root, game, window, gameCanvas, racket, briques, ball, window_size, livesText, scoreText):
 
         self.posx += self.speed_x
         self.posy += self.speed_y
 
         if self.posy > 608:
-            game.removeLife()
+            game.removeLife(gameCanvas, root, window, window_size, livesText, scoreText)
             self.widget.destroy()
-            window.tkPlaceBall(game, gameCanvas, window_size, fps=200)
+            window.tkPlaceBall(game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=1000)
             return True
 
         """
@@ -80,8 +80,8 @@ class Ball:
                     # ...
                     ball.speed_x *= -1
 
-                brique.destroy()
                 briques.remove(brique)
+                game.destroyBrique(game, brique, gameCanvas, root, window, window_size, livesText, scoreText)
                 game.score += 5
 
                 game.modifyScore(game.score)

@@ -9,11 +9,9 @@ def show_rules():
     try:
         with open("readme", "r") as file:
             content = file.read()
-        # Show content in a popup window
         messagebox.showinfo("Rules", content)
     except FileNotFoundError:
         messagebox.showerror("Error", "File 'readme' not found!")
-
 
 class Window:
     def __init__(self):
@@ -42,6 +40,23 @@ class Window:
     def tkDestroyWindow(self, root):
         root.destroy()
 
+    def makeGameWindow(self, root, game, window, WINDOW_SIZE, livesText, scoreText):
+        gameCanvas = window.tkPlaceGameCanvas(root, WINDOW_SIZE)
+
+        racket = window.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
+        game.racket = racket
+
+        briques = window.tkPlaceAllBriques(gameCanvas, 7, 7, 20, WINDOW_SIZE)
+        game.briques = briques
+
+        root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
+        root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
+
+        window.tkPlaceBall(game, gameCanvas, window, WINDOW_SIZE, gameCanvas, briques, livesText, scoreText, fps=1000)
+
+        window.tkPlaceScore(root, scoreText)
+        window.tkPlaceLives(root, livesText)
+
     def tkCreateAndPlaceButton(self, root, text, width, font_size, pos=[0, 0], tkDestroyWindow=None, color='black', bg=None):
         button = tk.Button(root, text=text, width=width, font=('Arial', font_size), fg=color, bg=bg, command=lambda:  self.tkDestroyWindow(root,))
         button.place(x=pos[0], y=pos[1])
@@ -59,9 +74,17 @@ class Window:
         livesLabelPrefix = tk.Label(root, text="Lives: ", width=5, font=('Arial', 14), fg='yellow', bg='black')
         livesLabelPrefix.place(x=546, y=12)
 
-    def tkPlaceStartMenu(self, root, window_size):
-        startButton = self.tkCreateAndPlaceButton(root, 'Start', 16, 14, [(int(window_size[0]) // 2) - 90, 150],)
-        quitButton =  self.tkCreateAndPlaceButton(root, 'Quit', 16, 14, [(int(window_size[0]) // 2) - 90, 200],  self.tkDestroyWindow)
+    def tkPlaceStartMenu(self, root, game, window, window_size, livesText, scoreText):
+        startButton = tk.Button(
+            root,
+            text='Start',
+            width=16,
+            font=('Arial', 14),
+            command=lambda: self.makeGameWindow(root, game, window, window_size, livesText, scoreText)
+        )
+        startButton.place(x=(int(window_size[0]) // 2) - 90, y=150)
+
+        quitButton =  self.tkCreateAndPlaceButton(root, 'Quit', 16, 14, [(int(window_size[0]) // 2) - 90, 200])
 
     def tkPlaceGameCanvas(self, root, window_size):
         gameCanvas = tk.Canvas(root, width=980, height=620, bg='black')
@@ -91,8 +114,8 @@ class Window:
         total_grid_width = cols * brick_width + (cols - 1) * gapx + cols*2
         start_x = (int(window_size[0]) - total_grid_width) / 2
 
-        for y in range(3):
-            for x in range(cols):
+        for y in range(1):
+            for x in range(1):
                 posx = start_x + x * (brick_width + gapx)
                 posy = padding + y * (brick_height + gapy)
                 brique = Brique(window_size, posx=posx, posy=posy)
@@ -105,25 +128,19 @@ class Window:
 
         return briques
     
-    def tkPlaceBall(self, game, root, window_size, fps=200):
-        briques = game.briques
-        racket = game.racket
-
-        ball = Ball(window_size, speed = 2, game = game)
-        newColor = game.ballColor.pop()  
-        game.ballColor.insert(0, game.currentBallColor)  
-        game.currentBallColor = newColor
-
+    def tkPlaceBall(self, game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=1000):
+        ball = Ball(window_size, speed=2, game=game)
         ball_widget = tk.Canvas(root, width=ball.radius*2, height=ball.radius*2, highlightthickness=0, bg='black')
         ball_widget.place(x=ball.posx, y=ball.posy)
         ball_widget.create_oval(0, 0, ball.radius*2, ball.radius*2, fill=game.currentBallColor, outline='black')
         ball.widget = ball_widget
+        game.ball = ball  # save reference here
 
         def tkUpdateBall():
-            destroyed = ball.move(game, self, root, racket, briques, ball, window_size)
+            destroyed = ball.move(root, game, window, gameCanvas, game.racket, briques, ball, window_size, livesText, scoreText)
             if not destroyed:
-                ball.widget.place(x=ball.posx, y=ball.posy)
-                root.after(1000 // fps, tkUpdateBall)
-
-        tkUpdateBall() 
+                if len(briques) != 0:
+                    ball.widget.place(x=ball.posx, y=ball.posy)
+                    ball.after_id = root.after(1000 // fps, tkUpdateBall)  # store after_id
+        tkUpdateBall()
         return ball

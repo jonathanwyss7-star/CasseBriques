@@ -1,5 +1,5 @@
 """
-todo: simplification et factorisation du code, entetes fichiers, commentaires, file couleurs balles, play again, modes de jeu, regles etc...
+todo: simplification et factorisation du code, entetes fichiers, commentaires, modes de jeu, regles etc...
 """
 
 import tkinter as tk
@@ -8,7 +8,7 @@ import window as windowClass
 from timeit import default_timer as timer
 
 root = tk.Tk()
-lives = 10
+lives = 50000
 livesText = tk.StringVar(root, value=str(lives))
 scoreText = tk.StringVar(root, value=str(0))
 
@@ -22,22 +22,6 @@ window.tkWindow = root
 root, game = window.tkInitTkinter(root, WINDOW_SIZE, 'Casse brique', 'black', lives, livesText, 0, scoreText)
 
 #...
-window.tkPlaceScore(root, scoreText)
-window.tkPlaceLives(root, livesText)
-
-window.tkPlaceStartMenu(root, WINDOW_SIZE)
-
-gameCanvas = window.tkPlaceGameCanvas(root, WINDOW_SIZE)
-
-racket = window.tkPlaceRacket(gameCanvas, WINDOW_SIZE)
-game.racket = racket
-
-briques = window.tkPlaceAllBriques(gameCanvas, 7, 7, 20, WINDOW_SIZE)
-game.briques = briques
-
-root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
-root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
-
-window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=200)
+window.tkPlaceStartMenu(root, game, window, WINDOW_SIZE, livesText, scoreText)
 
 root.mainloop()
