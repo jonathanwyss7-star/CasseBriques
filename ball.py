@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from timeit import default_timer as timer
+import window as win
 
 class Ball:
     def __init__(self, window_size, speed, game):
@@ -14,14 +15,16 @@ class Ball:
         self.speed_x = self.speed * np.cos(self.angle)
         self.speed_y = self.speed * np.sin(self.angle)
         
-    def move(self, game, racket, briques, ball):
+    def move(self, game, window, gameCanvas, racket, briques, ball, window_size):
 
         self.posx += self.speed_x
         self.posy += self.speed_y
 
         if self.posy > 608:
             game.removeLife()
-            self.speed_y *= -1
+            self.widget.destroy()
+            window.tkPlaceBall(game, gameCanvas, window_size, fps=200)
+            return True
 
         """
         ball_edge_x = self.posx + self.radius
@@ -84,3 +87,5 @@ class Ball:
                 game.modifyScore(game.score)
 
                 break
+
+        return False

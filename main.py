@@ -8,7 +8,7 @@ import window as windowClass
 from timeit import default_timer as timer
 
 root = tk.Tk()
-lives = 3
+lives = 10
 livesText = tk.StringVar(root, value=str(lives))
 scoreText = tk.StringVar(root, value=str(0))
 
@@ -38,6 +38,6 @@ game.briques = briques
 root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
 root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
 
-ball = window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=200)
+window.tkPlaceBall(game, gameCanvas, WINDOW_SIZE, fps=200)
 
 root.mainloop()

@@ -110,17 +110,20 @@ class Window:
         racket = game.racket
 
         ball = Ball(window_size, speed = 2, game = game)
-        
-        ball_widget = tk.Canvas(root, width=ball.radius * 2, height=ball.radius * 2, highlightthickness=0, bg='black')
+        newColor = game.ballColor.pop()  
+        game.ballColor.insert(0, game.currentBallColor)  
+        game.currentBallColor = newColor
+
+        ball_widget = tk.Canvas(root, width=ball.radius*2, height=ball.radius*2, highlightthickness=0, bg='black')
         ball_widget.place(x=ball.posx, y=ball.posy)
-        ball_widget.create_oval(0, 0, ball.radius * 2, ball.radius * 2, fill='red', outline='black')
+        ball_widget.create_oval(0, 0, ball.radius*2, ball.radius*2, fill=game.currentBallColor, outline='black')
         ball.widget = ball_widget
 
         def tkUpdateBall():
-            ball.move(game, racket, briques, ball)
-            ball.widget.place(x=ball.posx, y=ball.posy)
-
-            root.after(1000 // fps, tkUpdateBall)
+            destroyed = ball.move(game, self, root, racket, briques, ball, window_size)
+            if not destroyed:
+                ball.widget.place(x=ball.posx, y=ball.posy)
+                root.after(1000 // fps, tkUpdateBall)
 
         tkUpdateBall() 
         return ball

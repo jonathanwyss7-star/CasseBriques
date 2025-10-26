@@ -12,6 +12,9 @@ class Game:
         self.racket = None
         self.briques = None
 
+        self.ballColor = ["red", "green"]
+        self.currentBallColor = "blue"
+
     def removeLife(self):
         self.lives -= 1
         self.livesText.set(str(self.lives))
