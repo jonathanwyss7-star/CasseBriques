@@ -23,7 +23,7 @@ class Ball:
         if self.posy > 608:
             game.removeLife(gameCanvas, root, window, window_size, livesText, scoreText)
             self.widget.destroy()
-            window.tkPlaceBall(game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=1000)
+            window.tkPlaceBall(game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=250)
             return True
 
         """
@@ -82,7 +82,7 @@ class Ball:
 
                 briques.remove(brique)
                 game.destroyBrique(game, brique, gameCanvas, root, window, window_size, livesText, scoreText)
-                game.score += 5
+                game.score += 1
 
                 game.modifyScore(game.score)
 

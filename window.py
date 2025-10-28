@@ -1,9 +1,14 @@
+import pygame
 import tkinter as tk
 from brique import Brique
 from racket import Racket
 from game import Game
 from ball import Ball
 from tkinter import messagebox
+
+pygame.mixer.init()
+pygame.mixer.music.load("song.mp3")
+pygame.mixer.music.play(-1)  # start playing initially
 
 def show_rules():
     try:
@@ -25,17 +30,31 @@ class Window:
 
         menubar = tk.Menu(root)
         menu_file = tk.Menu(menubar, tearoff=0)
-        menu_file.add_command(label="Option 1")
-        menu_file.add_command(label="Option 2")
+        musicOn = tk.BooleanVar(value=True)
+
+        # fixed toggle: only respond to variable value
+        def toggleMusic():
+            if musicOn.get():
+                if not pygame.mixer.music.get_busy():
+                    pygame.mixer.music.play(-1)
+            else:
+                pygame.mixer.music.stop()
+
+        menu_file.add_checkbutton(
+            label="Music",
+            onvalue=True,
+            offvalue=False,
+            variable=musicOn,
+            command=toggleMusic
+        )
 
         menubar.add_cascade(label="Settings", menu=menu_file)
-        #make open file "readme" and display content
         menubar.add_command(label="Rules", command=show_rules)
         root.config(menu=menubar)
 
         game = Game(window_size, root, window_name, lives, livesText, score, scoreText)
-
         return root, game
+
 
     def tkDestroyWindow(self, root):
         root.destroy()
@@ -52,7 +71,7 @@ class Window:
         root.bind("<Left>", lambda event: racket.moveRacket(racket, 0))
         root.bind("<Right>", lambda event: racket.moveRacket(racket, 1))
 
-        window.tkPlaceBall(game, gameCanvas, window, WINDOW_SIZE, gameCanvas, briques, livesText, scoreText, fps=1000)
+        window.tkPlaceBall(game, gameCanvas, window, WINDOW_SIZE, gameCanvas, briques, livesText, scoreText, fps=250)
 
         window.tkPlaceScore(root, scoreText)
         window.tkPlaceLives(root, livesText)
@@ -114,8 +133,8 @@ class Window:
         total_grid_width = cols * brick_width + (cols - 1) * gapx + cols*2
         start_x = (int(window_size[0]) - total_grid_width) / 2
 
-        for y in range(1):
-            for x in range(1):
+        for y in range(3):
+            for x in range(cols):
                 posx = start_x + x * (brick_width + gapx)
                 posy = padding + y * (brick_height + gapy)
                 brique = Brique(window_size, posx=posx, posy=posy)
@@ -128,8 +147,13 @@ class Window:
 
         return briques
     
-    def tkPlaceBall(self, game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=1000):
+    def tkPlaceBall(self, game, root, window, window_size, gameCanvas, briques, livesText, scoreText, fps=250):
+        racket = game.racket
         ball = Ball(window_size, speed=2, game=game)
+        newColor = game.ballColor.pop()
+        game.ballColor.insert(0, game.currentBallColor)
+        game.currentBallColor = newColor
+
         ball_widget = tk.Canvas(root, width=ball.radius*2, height=ball.radius*2, highlightthickness=0, bg='black')
         ball_widget.place(x=ball.posx, y=ball.posy)
         ball_widget.create_oval(0, 0, ball.radius*2, ball.radius*2, fill=game.currentBallColor, outline='black')
@@ -142,5 +166,6 @@ class Window:
                 if len(briques) != 0:
                     ball.widget.place(x=ball.posx, y=ball.posy)
                     ball.after_id = root.after(1000 // fps, tkUpdateBall)  # store after_id
+
         tkUpdateBall()
         return ball
