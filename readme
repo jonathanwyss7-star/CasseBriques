@@ -1,1 +1,20 @@
-ezergregregrgrgeregr
+Casse-Briques - regles
+
+Objectif :
+Casser toutes les briques avec la balle. Évite de perdre toutes tes vies !
+
+Commandes :
+• Fleche gauche : deplacer la raquette à gauche
+• Fleche droite : deplacer la raquette à droite
+
+Fonctionnement :
+• Tu demarres avec 7 vies.
+• La balle rebondit sur les murs et sur la raquette.
+• Si la balle tombe en bas, tu perds une vie.
+• Chaque brique détruite te rapporte un point.
+• Quand toutes les briques sont detruites, tu gagnes.
+• Si tu perds toutes tes vies, le jeu recommence.
+
+Options :
+• Menu -> Music : activer ou désactiver la musique
+• Menu -> Rules : afficher ce fichier

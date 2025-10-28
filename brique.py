@@ -1,3 +1,9 @@
+"""
+TOUBI Mouaad et Jonathan Wyss
+07/10/2025 08:00
+Script qui définit la classe Brique
+"""
+
 import tkinter as tk
 from tkinter import messagebox 
 import numpy as np
